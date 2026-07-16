@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamil Selvan C — Full Stack Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10161B;
+    --surface: #19222A;
+    --surface-2: #1F2A33;
+    --line: #2C3944;
+    --amber: #E3A21C;
+    --amber-dim: #8A6A2C;
+    --teal: #5D9485;
+    --text: #ECE8DE;
+    --text-muted: #8C97A0;
+    --text-faint: #566068;
+    --radius: 2px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  a{ color: inherit; }
+  :focus-visible{ outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+  /* ---------- Title block header ---------- */
+  header{
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+    position: sticky; top:0;
+    background: rgba(16,22,27,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 50;
+  }
+  .header-row{ display:flex; align-items:center; justify-content: space-between; gap: 16px; }
+  .brand{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .dot{ width:8px; height:8px; background: var(--amber); border-radius:50%; box-shadow: 0 0 8px var(--amber); }
+  nav ul{ list-style:none; display:flex; gap: 28px; }
+  nav a{ text-decoration:none; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; color: var(--text-muted); text-transform: uppercase; transition: color .2s; }
+  nav a:hover{ color: var(--amber); }
+  .nav-toggle{ display:none; background:none; border:1px solid var(--line); color: var(--text); width:38px; height:38px; font-size:18px; cursor:pointer; }
+
+  /* ---------- Hero: title block ---------- */
+  .hero{ padding: 72px 0 40px; }
+  .title-block{
+    border: 1px solid var(--line);
+    background: var(--surface);
+    position: relative;
+  }
+  .title-block-grid{
+    display:grid;
+    grid-template-columns: 1fr auto;
+  }
+  .title-main{ padding: 44px 40px; border-right: 1px solid var(--line); }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display:flex; align-items:center; gap: 10px;
+  }
+  .eyebrow::before{ content:""; width: 22px; height:1px; background: var(--amber); }
+  h1{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+  .role-line{
+    font-family: var(--display);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--teal);
+    margin-top: 14px;
+    font-weight: 500;
+  }
+  .hero-summary{
+    margin-top: 24px;
+    max-width: 56ch;
+    color: var(--text-muted);
+    font-size: 15.5px;
+  }
+  .hero-actions{ display:flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 13px 22px;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    text-decoration: none;
+    display:inline-flex;
+    align-items:center; gap:8px;
+    transition: background .2s, color .2s;
+  }
+  .btn.solid{ background: var(--amber); color: #10161B; font-weight: 600; }
+  .btn.solid:hover{ background: #f0b843; }
+  .btn:not(.solid):hover{ background: rgba(227,162,28,0.1); }
+
+  .title-meta{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding: 44px 32px;
+    display:flex; flex-direction:column; gap: 18px;
+    min-width: 190px;
+  }
+  .title-meta div span{ display:block; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; margin-bottom: 4px; }
+  .title-meta div strong{ color: var(--text); font-weight: 500; font-size: 12.5px; }
+
+  /* ---------- Section shell ---------- */
+  section{ padding: 90px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+  .section-head{ display:flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+  .section-num{ font-family: var(--mono); color: var(--amber); font-size: 13px; }
+  .section-title{ font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; }
+  .section-line{ flex:1; height:1px; background: var(--line); }
+
+  /* ---------- Journey (signature schematic) ---------- */
+  .journey{ position: relative; }
+  .journey-track{
+    position: relative;
+    padding: 10px 0 0;
+  }
+  .journey-wire{
+    position: absolute;
+    top: 27px; left: 0; right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--teal) 0 10px, transparent 10px 16px);
+  }
+  .journey-nodes{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    position: relative;
+  }
+  .node{ display:flex; flex-direction: column; }
+  .node-dot-row{ display:flex; align-items:center; margin-bottom: 22px; }
+  .node-dot{
+    width: 16px; height:16px; border-radius:50%;
+    background: var(--bg);
+    border: 2px solid var(--teal);
+    position: relative; z-index: 2;
+  }
+  .node:last-child .node-dot{ border-color: var(--amber); box-shadow: 0 0 12px rgba(227,162,28,0.5); }
+  .node-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 22px 20px;
+    flex: 1;
+  }
+  .node-years{ font-family: var(--mono); font-size: 11px; color: var(--amber); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .node-role{ font-family: var(--display); font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+  .node-org{ font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; }
+  .node-desc{ font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+  /* ---------- Skills as board ---------- */
+  .board{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 6px;
+  }
+  .board-grid{ display:grid; grid-template-columns: repeat(5, 1fr); }
+  .board-cell{
+    padding: 26px 20px;
+    border: 1px solid var(--line);
+  }
+  .board-cell-label{
+    font-family: var(--mono); font-size: 10.5px; color: var(--teal);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .board-cell-label::before{ content:""; width:6px; height:6px; background: var(--teal); }
+  .chip-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text);
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  /* ---------- Projects ---------- */
+  .projects{ display:flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .project{
+    background: var(--bg);
+    padding: 34px 32px;
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap: 28px;
+  }
+  .project-index{ font-family: var(--mono); font-size: 13px; color: var(--text-faint); padding-top: 4px; }
+  .project-title{ font-family: var(--display); font-weight: 600; font-size: 20px; margin-bottom: 6px; }
+  .project-stack{ font-family: var(--mono); font-size: 11px; color: var(--teal); margin-bottom: 14px; letter-spacing: 0.04em; }
+  .project ul{ list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .project li{ font-size: 14px; color: var(--text-muted); padding-left: 18px; position: relative; }
+  .project li::before{ content:"—"; position:absolute; left:0; color: var(--text-faint); }
+  .project li.result{ color: var(--amber); }
+  .project li.result::before{ content:"→"; color: var(--amber); }
+
+  /* ---------- Education ---------- */
+  .edu-list{ display:flex; flex-direction:column; }
+  .edu-item{
+    display:grid; grid-template-columns: 1fr auto; gap: 12px;
+    padding: 20px 0; border-bottom: 1px solid var(--line);
+  }
+  .edu-item:last-child{ border-bottom:none; }
+  .edu-school{ font-size: 14.5px; color: var(--text); }
+  .edu-degree{ font-family: var(--display); font-weight: 600; font-size: 15.5px; margin-bottom: 3px; }
+  .edu-score{ font-family: var(--mono); font-size: 12.5px; color: var(--amber); text-align:right; white-space:nowrap; }
+  .edu-years{ font-family: var(--mono); font-size: 11.5px; color: var(--text-faint); text-align:right; }
+
+  /* ---------- Footer / contact ---------- */
+  footer{ padding: 70px 0 50px; }
+  .contact-grid{ display:grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+  .contact-title{ font-family: var(--display); font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 700; max-width: 14ch; }
+  .contact-sub{ color: var(--text-muted); margin-top: 14px; max-width: 42ch; font-size: 14.5px; }
+  .contact-links{ display:flex; flex-direction:column; gap: 4px; }
+  .contact-link{
+    display:flex; justify-content: space-between; align-items:center;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+    text-decoration:none; font-family: var(--mono); font-size: 13px;
+  }
+  .contact-link span:first-child{ color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
+  .contact-link span:last-child{ color: var(--text); }
+  .contact-link:hover span:last-child{ color: var(--amber); }
+  .foot-note{ margin-top: 60px; font-family: var(--mono); font-size: 11px; color: var(--text-faint); display:flex; justify-content: space-between; flex-wrap:wrap; gap:10px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .title-block-grid{ grid-template-columns: 1fr; }
+    .title-main{ border-right:none; border-bottom: 1px solid var(--line); padding: 34px 26px; }
+    .title-meta{ flex-direction: row; flex-wrap: wrap; padding: 24px 26px; gap: 24px; }
+    .board-grid{ grid-template-columns: repeat(2, 1fr); }
+    .journey-nodes{ grid-template-columns: 1fr; gap: 0; }
+    .journey-wire{ top:0; bottom:0; left:27px; right:auto; width:2px; height:auto; background: repeating-linear-gradient(180deg, var(--teal) 0 10px, transparent 10px 16px); }
+    .node{ flex-direction: row; gap: 18px; padding-bottom: 28px; }
+    .node-dot-row{ margin-bottom:0; }
+    .project{ grid-template-columns: 1fr; }
+    .contact-grid{ grid-template-columns: 1fr; }
+    nav ul{ position: fixed; top:57px; left:0; right:0; background: var(--bg); border-bottom:1px solid var(--line); flex-direction:column; padding: 10px 28px 20px; gap:0; display:none; }
+    nav ul.open{ display:flex; }
+    nav a{ padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .nav-toggle{ display:block; }
+  }
+  @media (max-width: 560px){
+    .board-grid{ grid-template-columns: 1fr; }
+    .hero{ padding: 48px 0 28px; }
+    section{ padding: 60px 0; }
+    .edu-item{ grid-template-columns: 1fr; }
+    .edu-score, .edu-years{ text-align:left; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="brand"><span class="dot"></span> TAMIL SELVAN C — REV.2026</div>
+    <nav>
+      <ul id="navList">
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" style="border-bottom:none; padding-bottom:0;">
+    <div class="title-block">
+      <div class="title-block-grid">
+        <div class="title-main">
+          <div class="eyebrow">Immediate Joiner — Junior Full Stack Developer</div>
+          <h1>Tamil Selvan C</h1>
+          <div class="role-line">React.js · Node.js · Python · MySQL</div>
+          <p class="hero-summary">Self-taught full stack developer who builds React and Node applications end to end — from REST APIs to MySQL schema design. Eight years spent keeping production lines and store operations running under pressure now show up as reliability, ownership, and a bias for shipping.</p>
+          <div class="hero-actions">
+            <a class="btn solid" href="mailto:tamilselvantsn1998@gmail.com">Email Me</a>
+            <a class="btn" href="https://github.com/Tamilselvan-devop" target="_blank" rel="noopener">GitHub ↗</a>
+            <a class="btn" href="https://tamilselvan-devop.github.io/tamil-selvanportfolio" target="_blank" rel="noopener">Live Portfolio ↗</a>
+          </div>
+        </div>
+        <div class="title-meta">
+          <div><span>Location</span><strong>Madurai, India</strong></div>
+          <div><span>Phone</span><strong>9514542966</strong></div>
+          <div><span>Languages</span><strong>Tamil, English</strong></div>
+          <div><span>Status</span><strong>Open to work</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="journey" class="wrap journey">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">The Circuit</h2>
+      <div class="section-line"></div>
+    </div>
+    <p style="color:var(--text-muted); max-width:60ch; margin-bottom:36px; font-size:14.5px;">Three roles, one current running through them: diagnose the fault, trace the system, fix what's broken. The last stop just happens to be code instead of copper.</p>
+    <div class="journey-track">
+      <div class="journey-wire"></div>
+      <div class="journey-nodes">
+        <div class="node">
+          <div class="node-dot-row"><div class="node-dot"></div></div>
+          <div class="node-card">
+            <div class="node-years">2018 – 2023</div>
+            <div class="node-role">Electrical Maintenance</div>
+            <div class="node-org">TVS Pvt. Ltd. / Apollo Tyres / TCS</div>
+            <div class="node-desc">Contributed to electrical maintenance and production quality control across three manufacturing environments.</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-dot-row"><div class="node-dot"></div></div>
+          <div class="node-card">
+            <div class="node-years">Jan 2024 – Nov 2025</div>
+            <div class="node-role">Store Manager</div>
+            <div class="node-org">OLA</div>
+            <div class="node-desc">Managed day-to-day store operations and coordinated team workflow to meet service delivery targets.</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-dot-row"><div class="node-dot"></div></div>
+          <div class="node-card">
+            <div class="node-years">July 2026 – Present</div>
+            <div class="node-role">Full Stack Web Developer</div>
+            <div class="node-org">Tracole Technologies Pvt. Ltd.</div>
+            <div class="node-desc">Building React.js and Node.js web applications with REST API integration and MySQL database design.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="wrap">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Board Layout</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="board">
+      <div class="board-grid">
+        <div class="board-cell">
+          <div class="board-cell-label">Frontend</div>
+          <div class="chip-list">
+            <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span><span class="chip">React.js</span><span class="chip">Bootstrap</span><span class="chip">Responsive UI</span>
+          </div>
+        </div>
+        <div class="board-cell">
+          <div class="board-cell-label">Backend</div>
+          <div class="chip-list">
+            <span class="chip">Node.js</span><span class="chip">Python</span><span class="chip">Flask</span><span class="chip">REST APIs</span>
+          </div>
+        </div>
+        <div class="board-cell">
+          <div class="board-cell-label">Database</div>
+          <div class="chip-list">
+            <span class="chip">MySQL</span>
+          </div>
+        </div>
+        <div class="board-cell">
+          <div class="board-cell-label">Tools</div>
+          <div class="chip-list">
+            <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span><span class="chip">Postman</span><span class="chip">DevTools</span>
+          </div>
+        </div>
+        <div class="board-cell">
+          <div class="board-cell-label">Concepts</div>
+          <div class="chip-list">
+            <span class="chip">CRUD</span><span class="chip">Auth</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="wrap">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Builds</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects">
+      <div class="project">
+        <div class="project-index">01</div>
+        <div>
+          <div class="project-title">E-Commerce Web Application</div>
+          <div class="project-stack">React.js · Node.js · Python · MySQL</div>
+          <ul>
+            <li>Full-stack platform with login/signup auth, product search &amp; filter, cart, and checkout flow</li>
+            <li>Admin panel with full CRUD functionality for dynamic product catalogue management</li>
+            <li class="result">Delivered a mobile-responsive UX across desktop and mobile using Bootstrap</li>
+          </ul>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-index">02</div>
+        <div>
+          <div class="project-title">Task Management App</div>
+          <div class="project-stack">React.js · localStorage</div>
+          <ul>
+            <li>Responsive to-do app with add, edit, delete, and completion-toggle, built with useState / useEffect</li>
+            <li class="result">Persistent task storage across page refreshes with no backend, via localStorage</li>
+          </ul>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-index">03</div>
+        <div>
+          <div class="project-title">Portfolio Website</div>
+          <div class="project-stack">HTML5 · CSS3 · JavaScript</div>
+          <ul>
+            <li>Personal site showcasing live projects, GitHub links, and skills</li>
+            <li class="result">Improved page performance scores through optimized asset loading, measured with Lighthouse</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="wrap">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="edu-list">
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">Diploma in Electrical &amp; Electronics Engineering</div>
+          <div class="edu-school">Lakshmi Ammal Polytechnic College, Kovilpatti</div>
+        </div>
+        <div>
+          <div class="edu-score">82%</div>
+          <div class="edu-years">2015 – 2017</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">Higher Secondary (12th)</div>
+          <div class="edu-school">Government Higher Secondary School, Chatrareddiyapatti</div>
+        </div>
+        <div>
+          <div class="edu-score">58%</div>
+          <div class="edu-years">2014 – 2015</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">Secondary (10th)</div>
+          <div class="edu-school">K V Sala Higher Secondary School, Virudhunagar</div>
+        </div>
+        <div>
+          <div class="edu-score">78%</div>
+          <div class="edu-years">2013 – 2014</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="wrap">
+    <div class="contact-grid">
+      <div>
+        <div class="contact-title">Let's build something that ships.</div>
+        <p class="contact-sub">Looking to grow under experienced engineers in a junior full stack role. Available immediately, based in Madurai.</p>
+      </div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:tamilselvantsn1998@gmail.com"><span>Email</span><span>tamilselvantsn1998@gmail.com</span></a>
+        <a class="contact-link" href="tel:9514542966"><span>Phone</span><span>9514542966</span></a>
+        <a class="contact-link" href="https://linkedin.com/in/tamil-selvan-716842143" target="_blank" rel="noopener"><span>LinkedIn</span><span>tamil-selvan-716842143</span></a>
+        <a class="contact-link" href="https://github.com/Tamilselvan-devop" target="_blank" rel="noopener"><span>GitHub</span><span>Tamilselvan-devop</span></a>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 Tamil Selvan C</span>
+      <span>Built with HTML · CSS · JS</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const navList = document.getElementById('navList');
+  toggle.addEventListener('click', () => {
+    const isOpen = navList.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+  navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navList.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+</script>
+</body>
+</html>
